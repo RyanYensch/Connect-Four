@@ -1,3 +1,9 @@
+/*
+#!/bin/bash
+g++ "$0" -o "${0%.cpp}" && exec "${0%.cpp}" "$@"
+*/
+
+
 #include <iostream>
 #include <vector>
 using namespace std;
