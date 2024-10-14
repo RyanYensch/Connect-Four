@@ -58,8 +58,20 @@ class ConnectFour {
 
     bool checkWin(int col) {
         int row = arrayOfVectors[col].size() - 1;
+        string player = (arrayOfVectors[col].at(row) == playerChar[0]) ? "Player 1": "Player 2";
+        clearScreen();
+        printBoard();
 
-        cout << countTiles(row, col, 0, 1) << '\n';
+        if (countTiles(row, col, 0, 1) >= 4) {
+            cout << player << " won horizontally!\n";
+            return true;
+        } else if (countTiles(row, col, 1, 0) >= 4) {
+            cout << player << " won vertically!\n";
+            return true;
+        } else if (countTiles(row, col, 1, 1) >= 4 || countTiles(row, col, 1, -1) >= 4) {
+            cout << player << " won diagonally!\n";
+            return true;
+        } 
 
 
         return false;
@@ -69,9 +81,9 @@ class ConnectFour {
     void playGame() {
         int col;
         int turn = 0;
+        clearScreen();
+        printBoard();
         do {
-            //clearScreen();
-            printBoard();
             do {
                 cout << "Which Column (0-6): ";
                 cin >> col;
