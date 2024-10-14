@@ -38,13 +38,20 @@ class ConnectFour {
 
     int countTiles(int row, int col, int drow, int dcol) {
         int same = 0;
-        // while (row < )
+        char compare = arrayOfVectors[col].at(row);
+        while (col >= 0 && row >= 0 && col < MaxCol && row < arrayOfVectors[col].size() && arrayOfVectors[col].at(row) == compare) {
+            same++;
+            row += drow;
+            col += dcol;
+        }
+
+        return same;
     }
 
     bool checkWin(int col) {
         int row = arrayOfVectors[col].size() - 1;
 
-
+        cout << countTiles(row, col, 0, 1) << '\n';
 
 
         return false;
@@ -55,7 +62,7 @@ class ConnectFour {
         int col;
         int turn = 0;
         do {
-            clearScreen();
+            //clearScreen();
             printBoard();
             do {
                 cout << "Which Column (0-6): ";
