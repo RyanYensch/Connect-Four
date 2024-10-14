@@ -2,6 +2,9 @@
 #include <vector>
 using namespace std;
 
+const int MaxRows = 6;
+const int MaxCol = 7;
+
 class ConnectFour {
     private:
     vector<vector<char>> arrayOfVectors;  // Declare it without initialization
@@ -17,8 +20,8 @@ class ConnectFour {
     }
 
     void printBoard() {
-        for (int j = 5; j >= 0; j--) {
-            for (int i = 0; i < 7; i++) {
+        for (int j = MaxRows - 1; j >= 0; j--) {
+            for (int i = 0; i < MaxCol; i++) {
                 if (arrayOfVectors[i].size() > j) {
                     cout << '|' << arrayOfVectors[i].at(j); 
                 } else {
@@ -33,7 +36,17 @@ class ConnectFour {
         arrayOfVectors[col].push_back(playerChar[playerID]);
     }
 
+    int countTiles(int row, int col, int drow, int dcol) {
+        int same = 0;
+        // while (row < )
+    }
+
     bool checkWin(int col) {
+        int row = arrayOfVectors[col].size() - 1;
+
+
+
+
         return false;
     }
 
@@ -47,7 +60,7 @@ class ConnectFour {
             do {
                 cout << "Which Column (0-6): ";
                 cin >> col;
-            } while ((col < 0 || col >= 7) || arrayOfVectors[col].size() >= 6);
+            } while ((col < 0 || col >= MaxCol) || arrayOfVectors[col].size() >= MaxCol - 1);
 
             playerMove(turn, col);
             turn = (turn + 1) % 2;
