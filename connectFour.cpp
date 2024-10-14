@@ -4,21 +4,25 @@ using namespace std;
 
 const int MaxRows = 6;
 const int MaxCol = 7;
+const char Player1char = 'X';
+const char Player2char = 'O';
 
 class ConnectFour {
     private:
     vector<vector<char>> arrayOfVectors;  // Declare it without initialization
-    char playerChar[2] = {'X', 'O'};
+    char playerChar[2] = {Player1char, Player2char};
 
     public:
     // Constructor with member initializer list
     ConnectFour() : arrayOfVectors(7) {}
 
     private:
+    // Clears the screen
     void clearScreen() {
         cout << "\033[2J\033[H";
     }
 
+    // Prints the board
     void printBoard() {
         for (int j = MaxRows - 1; j >= 0; j--) {
             for (int i = 0; i < MaxCol; i++) {
@@ -32,10 +36,12 @@ class ConnectFour {
         }
     }
 
+    // adds players move to the game
     void playerMove(int playerID, int col) {
         arrayOfVectors[col].push_back(playerChar[playerID]);
     }
 
+    // counts the tiles in a direction
     int countTiles(int row, int col, int drow, int dcol) {
         int same = 0;
         char compare = arrayOfVectors[col].at(row);
@@ -52,10 +58,11 @@ class ConnectFour {
             dcol *= -1;
         }
         
-
+        // counts the intial tile twice
         return same - 1;
     }
 
+    // checks if there is a 4+ in a row
     bool checkWin(int col) {
         int row = arrayOfVectors[col].size() - 1;
         string player = (arrayOfVectors[col].at(row) == playerChar[0]) ? "Player 1": "Player 2";
@@ -78,6 +85,7 @@ class ConnectFour {
     }
 
     public:
+    // Lets the class start the game and loop
     void playGame() {
         int col;
         int turn = 0;
@@ -98,7 +106,6 @@ class ConnectFour {
 
 int main() {
     ConnectFour game;
-
     game.playGame();
     return 0;
 }
