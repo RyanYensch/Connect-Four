@@ -39,13 +39,21 @@ class ConnectFour {
     int countTiles(int row, int col, int drow, int dcol) {
         int same = 0;
         char compare = arrayOfVectors[col].at(row);
-        while (col >= 0 && row >= 0 && col < MaxCol && row < arrayOfVectors[col].size() && arrayOfVectors[col].at(row) == compare) {
-            same++;
-            row += drow;
-            col += dcol;
-        }
 
-        return same;
+        for (int i = 0; i < 2; i++) {
+            int tempcol = col;
+            int temprow = row;
+            while (tempcol >= 0 && temprow >= 0 && tempcol < MaxCol && temprow < arrayOfVectors[tempcol].size() && arrayOfVectors[tempcol].at(temprow) == compare) {
+                same++;
+                temprow += drow;
+                tempcol += dcol;
+            }
+            drow *= -1;
+            dcol *= -1;
+        }
+        
+
+        return same - 1;
     }
 
     bool checkWin(int col) {
