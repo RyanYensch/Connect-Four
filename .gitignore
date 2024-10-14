@@ -1,0 +1,10 @@
+# Ignore all files
+*
+
+# But not these ones
+!*.cpp
+!*.md
+
+# Ensure Git tracks directories but ignores their contents
+!.gitignore
+!*/
