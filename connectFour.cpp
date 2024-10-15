@@ -150,15 +150,17 @@ class ConnectFour {
         playerId = 0;
         gamesMap[gameId] = {1, -1, 0, false};
         saveGamesToFile(gamesMap);
+        cout << "waiting For an opponent to join:\n";
+        
         playMultiGame(gameId);
     }
 
     void playMultiGame(int gameId) {
         map<int, GameState> gamesMap = loadGamesFromFile();
         int col;
-        bool isWinner = false;
+        bool isWinner, aborter = false;
         while (gamesMap[gameId].isGameOver == false) {
-            while (gamesMap[gameId].playerTurn != playerId) {
+            while (gamesMap[gameId].playerTurn != playerId || gamesMap[gameId].playerCount < 2) {
                 utils::delay(0.5);
                 gamesMap = loadGamesFromFile();
             }
@@ -171,9 +173,18 @@ class ConnectFour {
             printBoard();
 
             do {
-                cout << "Which Column (0-6): ";
+                cout << "Which Column (0-6) or (-1 to quit): ";
                 cin >> col;
-            } while ((col < 0 || col >= MaxCol) || arrayOfVectors[col].size() >= MaxCol - 1);
+            } while ((col < -1 || col >= MaxCol) || arrayOfVectors[col].size() >= MaxCol - 1);
+
+            if (col == -1) {
+                gamesMap[gameId].isGameOver = true;
+                gamesMap[gameId].playerTurn = (playerId + 1) % 2;
+                gamesMap[gameId].lastCol = col;
+                saveGamesToFile(gamesMap);
+                aborter = true;
+                cout << "Game has been aborted.\n";
+            }
 
             playerMove(playerId, col);
             gamesMap[gameId].lastCol = col;
@@ -189,10 +200,14 @@ class ConnectFour {
             }
         }
 
-        if (!isWinner) {
+        if (!isWinner && gamesMap[gameId].lastCol != -1) {
             clearScreen();
             printBoard();
             cout << "Your Opponent Won!\n";
+        } else if (!isWinner && gamesMap[gameId].lastCol == -1){
+            clearScreen();
+            printBoard();
+            cout << "Your Opponent Aborted!\n";
         }
         cout << "Game Over\n";
         
