@@ -27,6 +27,7 @@ class ConnectFour {
     private:
     vector<vector<char>> arrayOfVectors;  // Declare it without initialization
     char playerChar[2] = {Player1char, Player2char};
+    int playerId;
 
     public:
     // Constructor with member initializer list
@@ -134,6 +135,29 @@ class ConnectFour {
         
         file.close();
         return gamesMap;
+    }
+
+    void createGame(int gameId) {
+        map<int, GameState> gamesMap = loadGamesFromFile();
+        playerId = 0;
+        gamesMap[gameId] = {1, -1, 0, false};
+        saveGamesToFile(gamesMap);
+        playMultiGame();
+    }
+
+    void playMultiGame() {
+
+    }
+
+    public:
+    void joinGame(int gameId) {
+        map<int, GameState> gamesMap = loadGamesFromFile();
+        if (gamesMap.count(gameId) > 0) {
+            playerId = 1;
+            playMultiGame();
+        } else {
+            createGame(gameId);
+        }
     }
 
     public:
