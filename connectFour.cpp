@@ -8,6 +8,8 @@ g++ "$0" -o "${0%.cpp}" && exec "${0%.cpp}" "$@"
 #include <vector>
 #include <fstream>
 #include <map>
+#include <thread>
+#include <chrono>
 using namespace std;
 
 const int MaxRows = 6;
@@ -22,6 +24,12 @@ struct GameState {
     int playerTurn;
     bool isGameOver;
 };
+
+namespace time {
+    void delay(double seconds) {
+        this_thread::sleep_for(chrono::duration<double>(seconds));
+    }
+}
 
 class ConnectFour {
     private:
@@ -142,10 +150,10 @@ class ConnectFour {
         playerId = 0;
         gamesMap[gameId] = {1, -1, 0, false};
         saveGamesToFile(gamesMap);
-        playMultiGame();
+        playMultiGame(gameId);
     }
 
-    void playMultiGame() {
+    void playMultiGame(int gameId) {
 
     }
 
@@ -154,7 +162,7 @@ class ConnectFour {
         map<int, GameState> gamesMap = loadGamesFromFile();
         if (gamesMap.count(gameId) > 0) {
             playerId = 1;
-            playMultiGame();
+            playMultiGame(gameId);
         } else {
             createGame(gameId);
         }
