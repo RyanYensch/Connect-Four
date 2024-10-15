@@ -109,6 +109,7 @@ class ConnectFour {
         return false;
     }
 
+    // Saves the games map to the txt file
     void saveGamesToFile(const map<int, GameState>& gamesMap) {
         ofstream file(filename);
         if (!file.is_open()) {
@@ -125,6 +126,7 @@ class ConnectFour {
         file.close();
     }
 
+    // Loads the games from the file
     map<int, GameState> loadGamesFromFile() {
         ifstream file(filename);
         if (!file.is_open()) {
@@ -145,16 +147,18 @@ class ConnectFour {
         return gamesMap;
     }
 
+    // Creates a new game with the id
     void createGame(int gameId) {
         map<int, GameState> gamesMap = loadGamesFromFile();
         playerId = 0;
         gamesMap[gameId] = {1, -1, 0, false};
         saveGamesToFile(gamesMap);
         cout << "waiting For an opponent to join:\n";
-        
+
         playMultiGame(gameId);
     }
 
+    // Plays the game in multiplayer state
     void playMultiGame(int gameId) {
         map<int, GameState> gamesMap = loadGamesFromFile();
         int col;
@@ -213,6 +217,7 @@ class ConnectFour {
         
     }
 
+    // Joins a game of the id, if doesnt exist or done it creates
     public:
     void joinGame(int gameId) {
         map<int, GameState> gamesMap = loadGamesFromFile();
