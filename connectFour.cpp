@@ -100,20 +100,40 @@ class ConnectFour {
         return false;
     }
 
-    void saveGamesToFile(const map<int, GameState>& gameMap) {
+    void saveGamesToFile(const map<int, GameState>& gamesMap) {
         ofstream file(filename);
         if (!file.is_open()) {
             cerr << "Error: couldn't open file\n";
             return;
         }
 
-        for (const auto& pair: gameMap) {
+        for (const auto& pair: gamesMap) {
             file << pair.first << " " << pair.second.playerCount << " " 
              << pair.second.lastCol << " " << pair.second.playerTurn << " "
              << pair.second.isGameOver << endl;
         }
 
         file.close();
+    }
+
+    map<int, GameState> loadGamesFromFile() {
+        ifstream file(filename);
+        if (!file.is_open()) {
+            cerr << "Error: couldn't open file\n";
+            return {};
+        }
+
+        map<int, GameState> gamesMap;
+        int gameId, playerCount, lastCol, playerTurn;
+        bool isGameOver;
+
+        while (file >> gameId >> playerCount >> lastCol >> playerTurn >> isGameOver) {
+            GameState state = {playerCount, lastCol, playerTurn, isGameOver};
+            gamesMap[gameId] = state;
+        }
+        
+        file.close();
+        return gamesMap;
     }
 
     public:
@@ -139,5 +159,6 @@ class ConnectFour {
 int main() {
     ConnectFour game;
     game.playGame();
+   
     return 0;
 }
