@@ -6,12 +6,15 @@ g++ "$0" -o "${0%.cpp}" && exec "${0%.cpp}" "$@"
 
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <map>
 using namespace std;
 
 const int MaxRows = 6;
 const int MaxCol = 7;
 const char Player1char = 'X';
 const char Player2char = 'O';
+const string filename = "DataStore.txt";
 
 struct GameState {
     int playerCount;
@@ -97,6 +100,21 @@ class ConnectFour {
         return false;
     }
 
+    void saveGamesToFile(const map<int, GameState>& gameMap) {
+        ofstream file(filename);
+        if (!file.is_open()) {
+            cerr << "Error: couldn't open file\n";
+            return;
+        }
+
+        for (const auto& pair: gameMap) {
+            file << pair.first << " " << pair.second.playerCount << " " 
+             << pair.second.lastCol << " " << pair.second.playerTurn << " "
+             << pair.second.isGameOver << endl;
+        }
+
+        file.close();
+    }
 
     public:
     // Lets the class start the game and loop
