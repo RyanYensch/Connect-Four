@@ -217,6 +217,16 @@ class ConnectFour {
         
     }
 
+    // Deletes all the saved games
+    void removeAllGames() {
+        ofstream file(filename);
+        if (!file.is_open()) {
+            cerr << "Error: couldn't open file\n";
+            return;
+        }
+        file.close();
+    }
+
     // Joins a game of the id, if doesnt exist or done it creates
     public:
     void joinGame(int gameId) {
@@ -268,7 +278,6 @@ int main() {
     } else {
         game.playGame();
     }
-    
-   
+
     return 0;
 }
