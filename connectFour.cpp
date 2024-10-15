@@ -25,7 +25,7 @@ struct GameState {
     bool isGameOver;
 };
 
-namespace time {
+namespace utils {
     void delay(double seconds) {
         this_thread::sleep_for(chrono::duration<double>(seconds));
     }
@@ -154,17 +154,67 @@ class ConnectFour {
     }
 
     void playMultiGame(int gameId) {
+        map<int, GameState> gamesMap = loadGamesFromFile();
+        int col;
+        bool isWinner = false;
+        while (gamesMap[gameId].isGameOver == false) {
+            while (gamesMap[gameId].playerTurn != playerId) {
+                utils::delay(0.5);
+                gamesMap = loadGamesFromFile();
+            }
+            if (gamesMap[gameId].isGameOver == true) break;
 
+            if (gamesMap[gameId].lastCol != -1) {
+                playerMove((playerId + 1) % 2, gamesMap[gameId].lastCol);
+            }
+            clearScreen();
+            printBoard();
+
+            do {
+                cout << "Which Column (0-6): ";
+                cin >> col;
+            } while ((col < 0 || col >= MaxCol) || arrayOfVectors[col].size() >= MaxCol - 1);
+
+            playerMove(playerId, col);
+            gamesMap[gameId].lastCol = col;
+            gamesMap[gameId].playerTurn = (playerId + 1) % 2;
+            gamesMap[gameId].isGameOver = checkWin(col);
+            isWinner = gamesMap[gameId].isGameOver;
+
+            saveGamesToFile(gamesMap);
+            if (gamesMap[gameId].isGameOver == true) break;
+
+            if (!gamesMap[gameId].isGameOver) {
+                cout << "Waiting for opponents move\n";
+            }
+        }
+
+        if (!isWinner) {
+            clearScreen();
+            printBoard();
+            cout << "Your Opponent Won!\n";
+        }
+        cout << "Game Over\n";
+        
     }
 
     public:
     void joinGame(int gameId) {
         map<int, GameState> gamesMap = loadGamesFromFile();
-        if (gamesMap.count(gameId) > 0) {
+        if (gamesMap.count(gameId) > 0 && gamesMap[gameId].playerCount < 2) {
+            gamesMap[gameId].playerCount++;
+            saveGamesToFile(gamesMap);
             playerId = 1;
+            clearScreen();
+            printBoard();
+            cout << "Waiting for opponents move\n";
             playMultiGame(gameId);
+        } else if (gamesMap[gameId].playerCount >= 2 && gamesMap[gameId].isGameOver == false) {
+            cout << "Game is full.\nEnter new Game Id: ";
+            cin >> gameId;
+            joinGame(gameId);
         } else {
-            createGame(gameId);
+            createGame(gameId);  
         }
     }
 
@@ -189,8 +239,16 @@ class ConnectFour {
 };
 
 int main() {
+    int gameId;
+    cout << "Enter Game Id (-1 for same terminal): ";
+    cin >> gameId;
     ConnectFour game;
-    game.playGame();
+    if (gameId != -1) {
+        game.joinGame(gameId);
+    } else {
+        game.playGame();
+    }
+    
    
     return 0;
 }
