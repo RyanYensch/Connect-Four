@@ -13,6 +13,13 @@ const int MaxCol = 7;
 const char Player1char = 'X';
 const char Player2char = 'O';
 
+struct GameState {
+    int playerCount;
+    int lastCol;
+    int playerTurn;
+    bool isGameOver;
+};
+
 class ConnectFour {
     private:
     vector<vector<char>> arrayOfVectors;  // Declare it without initialization
@@ -89,6 +96,7 @@ class ConnectFour {
 
         return false;
     }
+
 
     public:
     // Lets the class start the game and loop
