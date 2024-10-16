@@ -1,0 +1,24 @@
+.chatbox {
+    border: 1px solid #ccc;
+        height: 300px;
+        width: 20%;
+        overflow-y: auto;
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: #f9f9f9;
+}
+
+.text {
+    width: 16%;
+    height: 20px;
+    margin-bottom: 10px;
+    float: left;
+}
+
+.button {
+    width: 4%;
+    height: 25px;
+    margin-left: 15px;
+    float: left;
+    text-align: center;
+}
